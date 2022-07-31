@@ -1,7 +1,7 @@
 {
     "name": "versionController",
-    "version": "1.0.0",
-    "description": "Git version selector based on SemVer",
+    "version": "0.0.0",
+    "description": "Git version selector based on Tags",
     "main": "index.js",
     "type": "module",
     "scripts": {
