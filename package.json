@@ -11,12 +11,8 @@
     "author": "Robbert-Jan Sebregts",
     "license": "ISC",
     "dependencies": {
-        "chalk": "^5.0.1",
         "chalk-animation": "^2.0.2",
         "dotenv": "^16.0.1",
-        "figlet": "^1.5.2",
-        "gitlog": "^4.0.4",
-        "gradient-string": "^2.0.1",
         "inquirer": "^9.0.2",
         "nanospinner": "^1.1.0",
         "simple-git": "^3.11.0"
