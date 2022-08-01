@@ -15,17 +15,25 @@ simpleGit().clean(CleanOptions.FORCE);
 dotenv.config()
 
 let SimpleGit;
-const apps = JSON.parse(process.env.PROGRAMS)
-const appObjects = apps.map(app => {return {name : app.program, value : {name : app.program, dir : app.directory}}})
-const spinner = createSpinner()
-
 const sleep = (ms = 2000) => new Promise((r)=> setTimeout(r, ms))
 const quitAnswer = {name : '🛑 Stop Version Controller ✋', value : 'quit'}
+
 async function welcome(){
     const rainbowTitle = chalkAnimation.rainbow('Welcome to version controller!')
     await sleep(200)
     rainbowTitle.stop()
 }
+if(!process.env.PROGRAMS){
+    await welcome()
+    console.log('No programs found in the .env file.\nSee readme for more information\nStopping Version Controller!')
+    process.exit(0)
+}
+
+const spinner = createSpinner()
+const apps = JSON.parse(process.env.PROGRAMS)
+const appObjects = apps.map(app => {return {name : app.program, value : {name : app.program, dir : app.directory}}})
+
+
 
 async function versionController(){
     const selectedProgram = await selectProgram()
