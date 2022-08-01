@@ -1,8 +1,8 @@
 #!/user/bin/env node
 
-// Propgram to switch versions based on git tags
+// Program to switch versions based on git tags
 // Inspired by Fireship.io
-// Made by Robbert-Jan Sebregts - 07-2022
+// Made by Robbert-Jan Sebregts - 07/08-2022
 
 import inquirer from "inquirer";
 import chalkAnimation from "chalk-animation"
