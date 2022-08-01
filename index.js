@@ -20,7 +20,7 @@ const appObjects = apps.map(app => {return {name : app.program, value : {name : 
 const spinner = createSpinner()
 
 const sleep = (ms = 2000) => new Promise((r)=> setTimeout(r, ms))
-
+const quitAnswer = {name : 'Stop Version Controller', value : 'quit'}
 async function welcome(){
     const rainbowTitle = chalkAnimation.rainbow('Welcome to version controller!')
     await sleep(200)
@@ -34,20 +34,28 @@ async function versionController(){
     const {confirmUpdate} = await confirmVersion(selectedCommit)
     if(!confirmUpdate){
         spinner.error({text : `Version Change aborted.`})
-        await sleep(2000)
+        await sleep(500)
         process.exit(1)
     }
     const changeVersionError = await gitVersionChange(selectedCommit)
     const endProgram = handleEnd(changeVersionError)
+    return endProgram
 }
-
+const checkForStop = (quit)=>{
+    if(quit === 'quit'){
+        spinner.error({text : `Stopping Version Controller!`})
+        await sleep(500)
+        process.exit(0)
+    }
+}
 async function selectProgram() {
     const answers = await inquirer.prompt({
         name : 'program',
         type : 'list',
         message : 'Which program do you want to change the version of?',
-        choices : appObjects,
+        choices : [...appObjects, quitAnswer],
     })
+    checkForStop(answers.program)
     return answers.program
 }
 async function getCommits(selectedProgram){
@@ -57,10 +65,10 @@ async function getCommits(selectedProgram){
     const tags = await SimpleGit.tags()
     // const commits = await SimpleGit.log(gitOptions.logOptions)
     // const versionRegEx = new RegExp(process.env.REGEX || /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/)
-    // const tagList = tags.all.reverse()
-    // .map(tag => {
-    //         return {name : tag,  value : {...selectedProgram, version : tag, previousVersion : status}}
-    // })
+    const tagList = tags.all.reverse()
+    .map(tag => {
+            return {name : tag,  value : {...selectedProgram, version : tag, previousVersion : status}}
+    })
     return {tagList, status }
 }
 
@@ -80,9 +88,10 @@ async function selectVersion(commits){
         name: 'info',
         type : 'rawlist',
         message : `Which version would you like to go to?\nCurrent version is ${commits.status}`,
-        choices : commits.tagList,
+        choices : [...commits.tagList, quitAnswer],
         loop: false
     })
+    checkForStop(answers.info)
     return answers
 }
 
@@ -106,7 +115,7 @@ async function handleEnd(changeVersionError){
     } else{
         const currentVersion = await SimpleGit.raw('describe')
         spinner.success({text : `Succesfully changed version to ${currentVersion}\nThank you for using Version Controller!\n`})
-        process.exit(1)
+        process.exit(0)
     }
 }
 
