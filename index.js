@@ -20,7 +20,7 @@ const appObjects = apps.map(app => {return {name : app.program, value : {name : 
 const spinner = createSpinner()
 
 const sleep = (ms = 2000) => new Promise((r)=> setTimeout(r, ms))
-const quitAnswer = {name : 'Stop Version Controller', value : 'quit'}
+const quitAnswer = {name : '🛑 Stop Version Controller ✋', value : 'quit'}
 async function welcome(){
     const rainbowTitle = chalkAnimation.rainbow('Welcome to version controller!')
     await sleep(200)
@@ -41,7 +41,7 @@ async function versionController(){
     const endProgram = handleEnd(changeVersionError)
     return endProgram
 }
-const checkForStop = (quit)=>{
+const checkForStop = async (quit)=>{
     if(quit === 'quit'){
         spinner.error({text : `Stopping Version Controller!`})
         await sleep(500)
@@ -55,7 +55,7 @@ async function selectProgram() {
         message : 'Which program do you want to change the version of?',
         choices : [...appObjects, quitAnswer],
     })
-    checkForStop(answers.program)
+    await checkForStop(answers.program)
     return answers.program
 }
 async function getCommits(selectedProgram){
@@ -91,7 +91,7 @@ async function selectVersion(commits){
         choices : [...commits.tagList, quitAnswer],
         loop: false
     })
-    checkForStop(answers.info)
+    await checkForStop(answers.info)
     return answers
 }
 
