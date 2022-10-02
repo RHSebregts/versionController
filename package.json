@@ -1,11 +1,11 @@
 {
     "name": "versionController",
-    "version": "1.3.1",
+    "version": "1.4.0",
     "description": "Git version selector based on Tags",
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start" : "node index.js",
+        "start": "node index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
